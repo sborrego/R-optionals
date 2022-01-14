@@ -5,10 +5,6 @@ date: "1/12/2022"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 Packages needed for today
 
 ```{r eval=FALSE}
@@ -86,7 +82,7 @@ sample_number <- nrow(input_data)
 results <- some_other_function(input_file, sample_number)
 # write results
 write.table(results, output_file)
-````
+```
 
 *Bad Example*: variables are not used when possible or defined at the beginning of script 
 ```{r eval=FALSE}
@@ -172,7 +168,7 @@ install.packages("knitr")
 
 # to use python
 install.packages("reticulate")
-````
+```
 
 **Set Up:**
 
@@ -199,7 +195,17 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 use_python("/Library/Frameworks/Python.framework/Versions/3.10/bin/python3")
 ```
 
-```{python eval=FALSE}
+```{python eval=TRUE}
+# Add two numbers
+# set numbers to variables
+num1 = 15
+num2 = 12
+  
+# sum of numbers
+sum = num1 + num2
+  
+# printing values
+print("Sum of {0} and {1} is {2}" .format(num1, num2, sum))
 ```
 
 ### Making Packages in R
