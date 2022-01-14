@@ -7,5 +7,6 @@ You can download the files by clicking on the green "CODE" button.
     - On your computer go to your command line. 
     - Navigate to the directory of your choice. 
     - Clone the repo: `git clone https://github.com/sborrego/R-optionals.git`
-3. Html file, it will open in your browser.
-4. Rmd files, will open in RStudio. Use `Knit` to see final rendered document.
+3. Open the files
+    - <b>Html</b> files will open in your browser.
+    - <b>Rmd</b> files will open in RStudio. Use `Knit` to see final rendered document.
