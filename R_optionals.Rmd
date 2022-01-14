@@ -1,0 +1,291 @@
+---
+title: "Programming in R - Day 3, afternoon"
+author: "Stacey Borrego"
+date: "1/12/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Packages needed for today
+
+```{r eval=FALSE}
+# installations can be `c`ombined
+install.packages(c("devtools", "roxygen2", "rmarkdown", "knitr")) 
+```
+
+### Best Practices for Writing R Code
+
+* [Best Practices for Writing R Code](http://swcarpentry.github.io/r-novice-inflammation/06-best-practices-R/index.html)
+* [Style Guide (Advanced R by Hadley Wickham)](http://adv-r.had.co.nz/Style.html)
+* Code clean-up helpers:
+  * RStudio --> Code --> Reindent Lines
+  * RStudio --> Code --> Reformat Code
+
+**Annotation**
+
+* Include description of the code
+  * What it does
+  * Why it was written
+  * The system it was written for
+  
+```{r}
+# This is code to replicate the analyses and figures from my 2014 Science
+# paper. Code developed by Sarah Supp, Tracy Teal, and Jon Borelli
+```
+
+**Version Control**
+
+* Use version control with clear and helpful commit messages
+  * [git](https://swcarpentry.github.io/git-novice/)
+  * [RStudio with Git Integration](https://web.archive.org/web/20190103191213/https://support.rstudio.com/hc/en-us/articles/200532077?mobile_site=true)
+  
+**Dependencies**
+
+* Load all the packages necessary at the top of your code using `library()`
+  * [The difference between `library()` and `require()`](https://www.r-bloggers.com/2017/10/loading-r-packages-library-or-require/)
+* May want to consider using the format `package::function()` especially if sharing scripts
+
+```{r eval=FALSE}
+library(ggplot2)
+library(reshape)
+library(rcolorbrewer)
+```
+
+* Reduce hard-coding input and output files and working directories paths
+  * Use variables to assign input and output files
+  * Use relative paths from the project directory
+* Define variables early on in the script
+
+*Relative path* - Best practice
+```{r eval=FALSE}
+dat <- read.csv(file = "files/dataset-2013-01.csv", header = TRUE)
+```
+
+*Absolute path* - not recommended
+
+```{r eval=FALSE}
+dat <- read.csv(file = "/Users/Karthik/Documents/sannic-project/files/dataset-2013-01.csv", header = TRUE)
+```
+
+*Good Example*: variables are defined at the top of script and values are calculated using variables
+```{r eval=FALSE}
+
+input_file <- "data/data.csv" 
+output_file <- "data/results.csv"
+
+# --------------------------------
+
+# read input
+input_data <- read.csv(input_file)
+# get number of samples in data
+sample_number <- nrow(input_data)
+# generate results
+results <- some_other_function(input_file, sample_number)
+# write results
+write.table(results, output_file)
+````
+
+*Bad Example*: variables are not used when possible or defined at the beginning of script 
+```{r eval=FALSE}
+# check
+input_data <- read.csv("data/data.csv")
+# get number of samples in data
+sample_number <- nrow(input_data)
+# generate results
+results <- some_other_function("data/data.csv", sample_number)
+# write results
+write.table("data/results.csv", output_file)
+```
+
+**Identify and segregate distinct components in your code**
+
+* Annotate and mark your code with comments. This will be helpful to understand what the code does, its requirements, and divide sections that perform similar tasks.
+  * `#`
+  * `#-----------`
+* Keep your code in bite-sized chunks. If a single function or loop gets too long, consider looking for ways to break it into smaller pieces.
+* Include functions at the top of your script
+  * If there are many custom functions, put them in their own script and source the file.
+    * Keep source files in the same project directory, then use relative paths.
+  
+```{r eval=FALSE}
+source("scripts/my_genius_fxns.R")
+```
+
+**Extra Tips**
+
+* Don’t repeat yourself–automate! If you are repeating the same code over and over (3x), use a loop or a function. 
+* Use a consistent style within your code. 
+  * Consistency makes code easier to read and problems easier to spot.
+  * Example: name all matrices something ending in _mat. 
+  * [Style Guide (Advanced R by Hadley Wickham)](http://adv-r.had.co.nz/Style.html)
+* Keep track of `sessionInfo()` in your project folder. 
+  * Notes all of the packages and versions used in the current project. If a newer version of a package changes the way a function behaves, you can reinstall the version that worked
+  * [CRAN](https://cran.r-project.org/), all versions of packages are archived
+* R can run into memory issues. R will not clean up unused memory for a while after you delete objects. You can force R to tidy up its memory by using `gc()` (Garbage Collection). See `?gc` for more information
+* `rm(list=ls())` can be a useful command, but do not put in your scripts.
+  * `rm()` is used to remove all the objects from the workspace when you use `list=ls()` as base
+  * instead of using this command, start a new session
+    * RStudio --> Session --> New Session
+
+##### Key Points
+
+* Start each program with a description of what it does.
+* Load all required packages at the top
+* Consider what working directory you are in when sourcing a script
+* Use comments to mark off sections of code
+* Put function definitions at the top of your file, or in a separate file if there are many.
+* Name and style code consistently.
+* Break code into small, discrete pieces.
+* Keep all of the source files for a project in one directory and use relative paths to access them.
+* Keep track of the memory used by your program.
+* Always start with a clean environment instead of saving the workspace.
+* Keep track of session information in your project folder.
+* Have someone else review your code.
+* Use version control.
+
+### Dynamic Reports with knitr
+
+* [Dynamic Reports with knitr](http://swcarpentry.github.io/r-novice-inflammation/07-knitr-R/index.html)
+* [Book: Dynamic Documents with R and knitr](https://duhi23.github.io/Analisis-de-datos/Yihue.pdf)
+
+* [R markdown cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)
+* [Rmarkdown from RStudio](https://rmarkdown.rstudio.com/)
+* [Rmarkdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+* [Rmarkdown Basics](https://rmarkdown.rstudio.com/authoring_basics.html)
+* [Get Started](https://rmarkdown.rstudio.com/lesson-1.html)
+
+**knitr** is an R package that allows you to organize your notes, code, and results in a single document.
+
+* Keeps your writing and results together and makes it easy to update
+* knitr documents are written in simple plain text-like format called markdown (Rmd)
+* Outputs: 
+  * HTML file
+  * PDF (requires LaTeX and [Pandoc](https://pandoc.org/installing.html))
+  * Word document ()
+
+```{r eval=FALSE}
+install.packages("rmarkdown")
+install.packages("knitr")
+
+# to use python
+install.packages("reticulate")
+````
+
+**Set Up:**
+
+* Install `rmarkdown` and `knitr` packages from CRAN
+* You may need to restart RStudio
+* RStudio: FILE --> NEW FILE --> R MARKDOWN...
+
+Rmarkdown files contain three types of content:
+
+* **Metadata**: An (optional) YAML header surrounded by ---s
+* **Code**: code chunks surrounded by ```s and language indicated by {}
+  * Command+Option+I or Ctrl+Alt+I
+* **Text**: mixed with simple text formatting
+
+```{bash}
+pwd
+ls /Users/stacey/Desktop/shell-lesson-data/*.txt
+```
+
+```{r}
+# install.packages("reticulate")
+library(reticulate)
+knitr::knit_engines$set(python = reticulate::eng_python)
+use_python("/Library/Frameworks/Python.framework/Versions/3.10/bin/python3")
+```
+
+```{python eval=FALSE}
+```
+
+### Making Packages in R
+
+* [Making Packages in R](http://swcarpentry.github.io/r-novice-inflammation/08-making-packages-R/index.html)
+* [R Packages by Hadley Wickham and Jenny Bryan](https://r-pkgs.org/)
+* [rOpenSci](https://devguide.ropensci.org/index.html)
+
+
+An R package is the basic unit of reusable code. If you want to reuse code later or want others to be able to use your code, you should put it in a package.
+
+An R package requires four components:
+
+* **DESCRIPTION** file with metadata about the package 
+* **R** directory with the code
+* **man** "man"ual or documentation
+* **NAMESPACE** file listing user-level functions in the package
+* Optional components
+
+Easily prepare packages using devtools!
+
+```{r eval=FALSE}
+install.packages(c("devtools", "roxygen2"))
+
+# Load packages to make help make your package
+library("devtools")
+library("roxygen2")
+
+# Move to location that package will be saved to 
+getwd()
+setwd("/Users/stacey/Desktop")
+
+# This will create a new project in a new session
+create_package("tempConvert")
+
+# Reload packages
+library("devtools")
+library("roxygen2")
+
+# Save each function in a script with descriptions written in the roxygen format
+
+# SCRIPT --------------------------------------------
+<!-- #' Converts Fahrenheit to CelSsius -->
+<!-- #' -->
+<!-- #' This function converts input temperatures in Fahrenheit to Celsius. -->
+<!-- #' @param temp_F The temperature in Fahrenheit. -->
+<!-- #' @return The temperature in Celsius. -->
+<!-- #' @export -->
+<!-- #' @examples -->
+<!-- #' fahrenheit_to_kelvin(32) -->
+# There are even more options
+
+# Write function HERE
+  
+# SCRIPT --------------------------------------------
+  
+# Make documentation
+document()
+
+# Test
+# In project session Build --> Clean and Rebuild 
+# Control+Shift+B
+?tempConvert
+celsius_to_kelvin(2)
+
+
+# Open a new session and load your package
+# Session --> New Session
+library(tempConvert)
+```
+
+* [Put your R package on Github](https://kbroman.org/pkg_primer/pages/github.html)
+* Just for fun and an example, here is a package I have on Github ---> [saguaRo](https://github.com/sborrego/saguaRo)
+
+
+### Command Line Programs
+
+* [Command Line Programs](http://swcarpentry.github.io/r-novice-inflammation/05-cmdline/index.html)
+* [R Basic Operations](http://swcarpentry.github.io/r-novice-inflammation/reference.html#standard-input-stdin)
+
+Making an R script that can be run on the command line in the following scenarios:
+
+* If no filename is given on the command line, read data from standard input.
+* If one or more filenames are given, read data from them and report statistics for each file separately.
+* Use the --min, --mean, or --max flag to determine what statistic to print.
+
+To make this work, we need to know how to handle command-line arguments in a program, and how to get at standard input. We’ll tackle these questions in turn below.
+
+

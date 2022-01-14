@@ -1,0 +1,142 @@
+---
+title: "Markdown example"
+author: "Stacey Borrego"
+date: "1/14/2022"
+output: html_document
+---
+
+This always shows up and I always leave it. It specifies any global settings to be applied to the R Markdown script. The example sets all code chunks as “echo=TRUE”, meaning they will be included in the final rendered version.
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# My first markdown
+## I'm so excited
+
+Let's do some *really* **fun** stuff today! 
+
+### First
+
+Start with a description for the purpose of this document. Your future self with 
+sthank you.
+
+The text that we write here shows up in our document.   
+You can look the [Rmarkdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+to find more formatting options.
+
+**Spacing Matters!**
+
+If your list or something else does not render correctly, make 
+you are using the correct spacing. 
+
+A list that won't work:
+* because
+* I didn't leave a space
+
+
+A list that will render properly:
+
+* because
+* I left a space
+
+
+**New Lines** 
+
+Formatting in your markdown file doesn't matter especially when it comes to new 
+lines. You have to format a line return with two spaces after the last line to 
+get the next line to actually return on the next line. So keep your code clean 
+looking and use the formatting characters to render your markdown file properly!
+
+
+*Example of NO double space on line return* 
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+....................
+
+
+*Example of double space on line return*  
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  
+....................
+
+**HTML Components**
+
+* Leave a large space you can use `<br>` to create breaks
+* Insert image from website with `<img src="web_address">`
+* Insert links `<a href=""> </a>`
+<br>
+<br>
+<br>
+<br>
+
+4 line breaks above me!
+
+Image with HTML
+
+<img src=https://d33wubrfki0l68.cloudfront.net/eb48bae40b24285c0c8f281e6d2a7500cf3b9fc8/a2e5f/knitr/images/knit-logo.png>
+
+Image with R code
+
+```{r echo=FALSE}
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/eb48bae40b24285c0c8f281e6d2a7500cf3b9fc8/a2e5f/knitr/images/knit-logo.png")
+```
+
+Links with HTML
+
+<a href="https://beatrizmilz.github.io/RStudio_Certification/slides.html#10"> Helpful Link </a>
+
+Links with markdown
+
+[Helpful Link](https://beatrizmilz.github.io/RStudio_Certification/slides.html#10)
+
+### Second
+
+Let's use our R skills!
+
+Make a code chunk. You can use R, bash, or python in the code chunks. We will
+stick to R today.
+
+```{r}
+```
+
+
+```{r}
+analyze <- function(filename) {
+  # Plots the average, min, and max inflammation over time.
+  # Input is character string of a csv file.
+  dat <- read.csv(file = filename, header = FALSE)
+  avg_day_inflammation <- apply(dat, 2, mean)
+  plot(avg_day_inflammation,
+       col = "purple")
+}
+
+filenames <- list.files(path = "/Users/stacey/Desktop/data", 
+                        pattern = "inflammation-[0-9]{2}.csv", 
+                        full.names = TRUE)
+
+for (file in filenames[1:3]){
+  analyze(file)
+}
+```
+
+Code is not rendered but results are by using `echo=FALSE`
+
+```{r echo=FALSE}
+analyze <- function(filename) {
+  # Plots the average, min, and max inflammation over time.
+  # Input is character string of a csv file.
+  dat <- read.csv(file = filename, header = FALSE)
+  avg_day_inflammation <- apply(dat, 2, mean)
+  plot(avg_day_inflammation,
+       col = "forestgreen",
+       type = "h")
+}
+
+filenames <- list.files(path = "/Users/stacey/Desktop/data", 
+                        pattern = "inflammation-[0-9]{2}.csv", 
+                        full.names = TRUE)
+
+for (file in filenames[1:3]){
+  analyze(file)
+}
+```
+
